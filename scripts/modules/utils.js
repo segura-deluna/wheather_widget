@@ -1,9 +1,30 @@
 const addZero = (n) => (n < 10 ? `0${n}` : n);
 
 export const getCurrentDateTime = () => {
-  const months = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+  const months = [
+    'янв',
+    'фев',
+    'мар',
+    'апр',
+    'май',
+    'июн',
+    'июл',
+    'авг',
+    'сен',
+    'окт',
+    'ноя',
+    'дек',
+  ];
 
-  const weekdays = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
+  const weekdays = [
+    'воскресенье',
+    'понедельник',
+    'вторник',
+    'среда',
+    'четверг',
+    'пятница',
+    'суббота',
+  ];
 
   const date = new Date();
 
@@ -16,13 +37,6 @@ export const getCurrentDateTime = () => {
   const minutes = addZero(date.getMinutes());
 
   return { dayOfMonth, month, year, hours, minutes, dayOfWeek };
-};
-
-export const getWindDirection = (deg) => {
-  const directions = ['&#8595;', '&#8601;', '&#8592;', '&#8598;', '&#8593;', '&#8599;', '&#8594;', '&#8600;'];
-
-  const i = Math.round(deg / 45) % 8;
-  return directions[i];
 };
 
 export const calculateDewPoint = (temp, humidity) => {
@@ -41,7 +55,10 @@ export const convertPressure = (pressure) => {
 
 export const getWeatherForecastData = (data) => {
   const forecast = data.list.filter(
-    (item) => new Date(item.dt_txt).getHours() === 12 && new Date(item.dt_txt).getDate() > new Date().getDate()
+    (item) =>
+      new Date(item.dt_txt).getHours() === 12 &&
+      new Date(item.dt_txt).getDate() > new Date().getDate() &&
+      new Date(item.dt_txt).getDate() < new Date().getDate() + 5
   );
 
   const forecastData = forecast.map((item) => {
@@ -60,7 +77,9 @@ export const getWeatherForecastData = (data) => {
       if (tempDate.getDate() === date.getDate()) {
         if (temp < minTemp) {
           minTemp = temp;
-        } else {
+        }
+
+        if (temp > maxTemp) {
           maxTemp = temp;
         }
       }

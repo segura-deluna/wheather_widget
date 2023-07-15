@@ -3,11 +3,11 @@ import {
   convertPressure,
   getCurrentDateTime,
   getWeatherForecastData,
-  getWindDirection,
 } from './utils.js';
 
 export const renderWidgetToday = (widget, data) => {
-  const { dayOfMonth, month, year, hours, minutes, dayOfWeek } = getCurrentDateTime();
+  const { dayOfMonth, month, year, hours, minutes, dayOfWeek } =
+    getCurrentDateTime();
 
   widget.insertAdjacentHTML(
     'beforeend',
@@ -23,7 +23,9 @@ export const renderWidgetToday = (widget, data) => {
           <p class='widget__day'>${dayOfWeek}</p>
         </div>
         <div class='widget__icon'>
-          <img class='widget__img' src='./icon/${data.weather[0].icon}.svg' alt='Погода'>
+          <img class='widget__img' src='./icon/${
+            data.weather[0].icon
+          }.svg' alt='Погода'>
         </div>
         <div class='widget__wheather'>
           <div class='widget__city'>
@@ -38,25 +40,32 @@ export const renderWidgetToday = (widget, data) => {
     `
   );
 };
-export const renderWidgetOther = (widget, data) => {
+export const renderWidgetOther = (
+  widget,
+  { wind: { speed, deg }, main: { humidity, temp, pressure } }
+) => {
   widget.insertAdjacentHTML(
     'beforeend',
     `
       <div class='widget__other'>
         <div class='widget__wind'>
           <p class='widget__wind-title'>Ветер</p>
-          <p class='widget__wind-speed'>${data.wind.speed} м/с</p>
-          <p class='widget__wind-text'>${getWindDirection(data.wind.deg)}</p>
-  
+          <p class='widget__wind-speed'>${speed} м/с</p>
+          <p class='widget__wind-text' 
+              style='transform: rotate(${deg}deg)'>&#8595</p>
         </div>
         <div class='widget__humidity'>
           <p class='widget__humidity-title'>Влажность</p>
-          <p class='widget__humidity-value'>${data.main.humidity}%</p>
-          <p class='widget__humidity-text'>Т.Р: ${calculateDewPoint(data.main.temp, data.main.humidity)}°C</p>
+          <p class='widget__humidity-value'>${humidity}%</p>
+          <p class='widget__humidity-text'>Т.Р: 
+            ${calculateDewPoint(temp, humidity)}°C
+          </p>
         </div>
         <div class='widget__pressure'>
           <p class='widget__pressure-title'>Давление</p>
-          <p class='widget__pressure-value'>${convertPressure(data.main.pressure)}</p>
+          <p class='widget__pressure-value'>
+            ${convertPressure(pressure)}
+          </p>
           <p class='widget__pressure-text'>мм рт.ст.</p>
         </div>
       </div>
@@ -78,9 +87,13 @@ export const renderWidgetForecast = (widget, data) => {
       'beforeend',
       `
         <p class='widget__day-text'>${item.dayOfWeek}</p>
-        <img class='widget__day-img' src='./icon/${item.weatherIcon}.svg' alt='Погода'>
-        <p class='widget__day-temp'>${item.minTemp.toFixed(1)}°/${item.maxTemp.toFixed(1)}°</p>
-        `
+        <img class='widget__day-img' 
+              src='./icon/${item.weatherIcon}.svg' alt='Погода'>
+        <p class='widget__day-temp'>
+            ${item.minTemp.toFixed(1)}°/
+            ${item.maxTemp.toFixed(1)}°
+        </,p>
+     `
     );
 
     return widgetDayItem;
